@@ -983,9 +983,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// Local Date Time object
-		// TODO Write an implementation for this method declaration
-		return null;
+		LocalDateTime result = LocalDateTime.now();
+		if(given instanceof LocalDate) {
+			LocalDateTime dateTime = ((LocalDate) given).atTime(0, 0, 0);
+			System.out.println("1:  "+dateTime);
+			result = dateTime.plusSeconds(1000000000);
+		}else {
+			LocalDateTime dateTime = (LocalDateTime) given;
+			System.out.println("2:  "+dateTime);
+			result = dateTime.plusSeconds(1000000000);
+		}
+		return result;
 	}
 
 	/**
