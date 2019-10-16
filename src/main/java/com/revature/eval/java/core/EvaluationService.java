@@ -1,11 +1,15 @@
 package com.revature.eval.java.core;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class EvaluationService {
 
@@ -33,16 +37,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		String[] acronym = phrase.split("[, ?.@-]");
-		String result = "";
-		for (int i = 0; i < acronym.length; i++) {
-			if (!acronym[i].isEmpty()) {
-				String firstLetter = Character.toString(Character.toUpperCase(acronym[i].charAt(0)));
-				result = result.concat(firstLetter);
+		String[] words = phrase.split("[, ?.@-]"); 				// splitting the string on some punctuation
+		String result = "";										// initializing the output string
+		for (int i = 0; i < words.length; i++) {				// for loop to traverse the array 
+			if (!words[i].isEmpty()) {							// checking that the word is not empty 
+				String firstLetter = Character.toString(Character.toUpperCase(words[i].charAt(0)));		//grabbing the first letter of the word
+				result = result.concat(firstLetter);			// adding the first letter to the result string
 			}
 		}
 
-		return result;
+		return result;											//return result string
 	}
 
 	/**
@@ -94,7 +98,7 @@ public class EvaluationService {
 			this.sideThree = sideThree;
 		}
 
-		public boolean isEquilateral() {
+		public boolean isEquilateral() {					// checks if all sides are equal
 			if (sideOne == sideTwo && sideOne == sideThree) {
 				return true;
 			} else {
@@ -102,7 +106,7 @@ public class EvaluationService {
 			}
 		}
 
-		public boolean isIsosceles() {
+		public boolean isIsosceles() {						// checks if any two sides are equal
 			if (sideOne == sideTwo || sideOne == sideThree || sideTwo == sideThree) {
 				return true;
 			} else {
@@ -110,7 +114,7 @@ public class EvaluationService {
 			}
 		}
 
-		public boolean isScalene() {
+		public boolean isScalene() {						//checks that no side is equal to another
 			if (sideOne != sideTwo && sideOne != sideThree && sideTwo != sideThree) {
 				return true;
 			} else {
@@ -340,8 +344,27 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			List<T> array = sortedList;
+			int halfOfArray = sortedList.size() / 2;
+			int result = halfOfArray;
+			while (t.compareTo(array.get(halfOfArray)) != 0) {
+				if (t.compareTo(array.get(halfOfArray)) > 0) {
+					array = array.subList(halfOfArray, array.size());
+					halfOfArray = array.size() / 2;
+					result += halfOfArray;
+					if (array.size() == 1) {
+						result = sortedList.size()-1;
+					}
+				} else {
+					array = array.subList(0, halfOfArray);
+					halfOfArray = array.size() / 2;
+					result = result - halfOfArray;
+					if (array.size() == 1) {
+						result = 0;
+					}
+				}
+			}
+			return result;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -984,13 +1007,11 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		LocalDateTime result = LocalDateTime.now();
-		if(given instanceof LocalDate) {
+		if (given instanceof LocalDate) {
 			LocalDateTime dateTime = ((LocalDate) given).atTime(0, 0, 0);
-			System.out.println("1:  "+dateTime);
 			result = dateTime.plusSeconds(1000000000);
-		}else {
+		} else {
 			LocalDateTime dateTime = (LocalDateTime) given;
-			System.out.println("2:  "+dateTime);
 			result = dateTime.plusSeconds(1000000000);
 		}
 		return result;
