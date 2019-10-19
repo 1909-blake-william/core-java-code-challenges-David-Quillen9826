@@ -140,11 +140,11 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		int score = 0;
-		String word = string.toUpperCase();
-		for (int i = 0; i < word.length(); i++) {
+		int score = 0;										// initializing the word's score and setting it to 0
+		String word = string.toUpperCase();							
+		for (int i = 0; i < word.length(); i++) {			// for loop to get each letter
 			char letter = word.charAt(i);
-			switch (letter) {
+			switch (letter) {								// switch case to check each letter and add to the score
 			case 'A':
 				score += 1;
 				break;
@@ -227,7 +227,7 @@ public class EvaluationService {
 				break;
 			}
 		}
-		return score;
+		return score;										// return the score
 	}
 
 	/**
@@ -262,15 +262,15 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		String trimmed = string.trim();
-		String result = trimmed.replaceAll("[^a-zA-Z0-9]", "");
+		String trimmed = string.trim();								// trimming whitespace
+		String result = trimmed.replaceAll("[^a-zA-Z0-9]", "");		// removing all special characters
 
-		if (result.length() > 11) {
+		if (result.length() > 11) {									// checks that the string is not too long
 			throw new IllegalArgumentException();
 		} else {
-			for (int i = 0; i < result.length(); i++) {
+			for (int i = 0; i < result.length(); i++) {				// checks each character for if it is a digit
 				char letter = result.charAt(i);
-				if (!Character.isDigit(letter)) {
+				if (!Character.isDigit(letter)) {					// if it is not a digit throw an exception
 					throw new IllegalArgumentException();
 				}
 			}
@@ -289,17 +289,17 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 
-		String[] words = string.replaceAll("[\\n]", "").split("[ ,]");
+		String[] words = string.replaceAll("[\\n]", "").split("[ ,]");		// removing whitespace and splitting the string into individual words
 		HashMap<String, Integer> map = new HashMap<>();
-		for (int i = 0; i < words.length; i++) {
-			int wordCount = 0;
-			for (int j = 0; j < words.length; j++) {
-				if (words[i].equals(words[j])) {
-					wordCount++;
+		for (int i = 0; i < words.length; i++) {							// for loop to collect a word
+			int wordCount = 0;												// initializing a wordCount variable
+			for (int j = 0; j < words.length; j++) {						// for loop to count the number of times a word is in the array
+				if (words[i].equals(words[j])) {							
+					wordCount++;											// increment the wordCount if the words match
 				}
 			}
-			if (words[i] != "") {
-				map.put(words[i], wordCount);
+			if (words[i] != "") {											// checking that we actually have a word and not an empty string
+				map.put(words[i], wordCount);								
 			}
 		}
 		return map;
@@ -344,22 +344,22 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			List<T> array = sortedList;
-			int halfOfArray = sortedList.size() / 2;
-			int result = halfOfArray;
-			while (t.compareTo(array.get(halfOfArray)) != 0) {
-				if (t.compareTo(array.get(halfOfArray)) > 0) {
-					array = array.subList(halfOfArray, array.size());
-					halfOfArray = array.size() / 2;
-					result += halfOfArray;
-					if (array.size() == 1) {
+			List<T> array = sortedList;										//create an array
+			int halfOfArray = sortedList.size() / 2;						//create an int for the half of the array
+			int result = halfOfArray;										//initialize a result int at half of the array
+			while (t.compareTo(array.get(halfOfArray)) != 0) {				//while loop to find the element of the array
+				if (t.compareTo(array.get(halfOfArray)) > 0) {				//if the element is greater than the given element 
+					array = array.subList(halfOfArray, array.size());		//create a new subarray containing everything greater than the array
+					halfOfArray = array.size() / 2;							//resize the new half of the array
+					result += halfOfArray;									//add the new half of the array to the result
+					if (array.size() == 1) {								//if you get down to a single element use the sorted list size-1
 						result = sortedList.size()-1;
 					}
-				} else {
-					array = array.subList(0, halfOfArray);
-					halfOfArray = array.size() / 2;
-					result = result - halfOfArray;
-					if (array.size() == 1) {
+				} else {													//if the element is lesser than the given element 
+					array = array.subList(0, halfOfArray);					//create a new subarray containing everything lesser than the array
+					halfOfArray = array.size() / 2;							//resize the new half of the array
+					result = result - halfOfArray;							//subtract the new half of the array to the result
+					if (array.size() == 1) {								//edge case for the first element 
 						result = 0;
 					}
 				}
@@ -400,40 +400,40 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		boolean restOfWord = false;
-		boolean hasQ = false;
+		boolean restOfWord = false;								// initializing boolean for telling if we are in the rest of the word
+		boolean hasQ = false;									// initializing boolean if word has a q
 		StringBuilder result = new StringBuilder();
-		String[] words = string.split(" ");
-		for (String word : words) {
-			StringBuilder str = new StringBuilder();
-			StringBuilder str2 = new StringBuilder();
-			for (int i = 0; i < word.length(); i++) {
-				char letter = word.charAt(i);
-				if (letter == 'q') {
+		String[] words = string.split(" ");						// splitting the string into individual words
+		for (String word : words) {								// for loop iterating through the words
+			StringBuilder str = new StringBuilder();			// stringbuilder for first part of word
+			StringBuilder str2 = new StringBuilder();			// string builder for second part of word
+			for (int i = 0; i < word.length(); i++) {			// for loop iterating through each letter of a word
+				char letter = word.charAt(i);					// intitializing a variable for the letter
+				if (letter == 'q') {							// checking for a 'q'
 					restOfWord = true;
 					hasQ = true;
 				}
-				if (letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u') {
+				if (letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u') {	// checking for a vowel
 					restOfWord = true;
 				}
-				if (!restOfWord) {
-					str.append(letter);
+				if (!restOfWord) {								// add the letter to the first stringbuilder if its not part of the
+					str.append(letter);							// rest of the world
 				} else {
-					if (hasQ) {
+					if (hasQ) {									// if it has a q, add a u and ignore the next letter
 						str.append("qu");
 						i++;
 						hasQ = false;
-					} else {
+					} else {									//add the rest of the word to the other stringbuilder
 						str2.append(letter);
 					}
 				}
 			}
-			str.append("ay ");
-			result.append(str2.toString());
-			result.append(str.toString());
-			restOfWord = false;
+			str.append("ay ");									//adding the "ay " to the ending
+			result.append(str2.toString());						//add the second part of the original word to the result
+			result.append(str.toString());						//add the first part of the original word and "ay" to the result
+			restOfWord = false;									//reset the restofWord boolean
 		}
-		return result.toString().trim();
+		return result.toString().trim();						//trim and return the result
 	}
 
 	/**
@@ -452,16 +452,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		int power = Integer.toString(input).length();
-		int result = 0;
-		for (int i = 0; i < power; i++) {
+		int power = Integer.toString(input).length();				//getting the number of digits
+		int total = 0;												//initializing the total 
+		for (int i = 0; i < power; i++) {							//for loop to get each digit 
 			int number = Character.getNumericValue(Integer.toString(input).charAt(i));
-			double n = Math.pow(number, power);
-			result += n;
+			double n = Math.pow(number, power);						//putting each digit to the power 
+			total += n;												//adding the resulting number to the total
 		}
-		if (result == input) {
-			return true;
-		} else {
+		if (total == input) {										//if the total and the input match
+			return true;											//it is an Armstrong number
+		} else {													//else it isn't
 			return false;
 		}
 	}
@@ -477,12 +477,12 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		List<Long> factors = new ArrayList<Long>();
+		List<Long> factors = new ArrayList<Long>();			//initialize a list of factors
 
-		for (long i = 2l; i <= l; i++) {
-			while (l % i == 0) {
-				factors.add(i);
-				l = (long) (l / i);
+		for (long i = 2l; i <= l; i++) {					//for loop to test every number between 2 and l
+			while (l % i == 0) {							//while loop so that as long as long l is divisible by i
+				factors.add(i);								// it adds i to the list of factors
+				l = (long) (l / i);							// and then divides l by i to get a new l
 			}
 		}
 		return factors;
@@ -524,28 +524,28 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 
-			StringBuilder str = new StringBuilder();
-			boolean upperCase = false;
+			StringBuilder str = new StringBuilder();				//initialize a stringbuilder
+			boolean upperCase = false;								
 			int letter = 0;
-			for (int i = 0; i < string.length(); i++) {
-				letter = string.charAt(i);
+			for (int i = 0; i < string.length(); i++) {				//for loop to get each letter
+				letter = string.charAt(i);							//checks if the character is a letter
 				if ((letter >= 97 && string.charAt(i) <= 122) || (string.charAt(i) >= 65 && string.charAt(i) <= 90)) {
-					if (string.charAt(i) >= 97 && string.charAt(i) <= 122) {
+					if (string.charAt(i) >= 97 && string.charAt(i) <= 122) {	// checks if it is uppercase
 						upperCase = true;
 					}
-					letter = letter + key;
-					if (upperCase) {
+					letter = letter + key;							//rotate the letter
+					if (upperCase) {								//if uppercase checks if it is no longer a letter and converts back if true
 						if (letter > 122) {
 							letter = letter - 26;
 						}
-					} else {
+					} else {										//if lowercase checks if it is no longer a letter and converts back if true
 						if (letter > 90) {
 							letter = letter - 26;
 						}
 					}
 				}
-				upperCase = false;
-				str.append((char) (letter));
+				upperCase = false;									//reset the boolean upperCase
+				str.append((char) (letter));						//appends the converted letter to the string
 			}
 			String result = str.toString();
 			return result;
@@ -567,23 +567,23 @@ public class EvaluationService {
 	 */
 	public int calculateNthPrime(int i) {
 		if (i < 1) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException();			//check for valid input
 		}
-		List<Integer> primes = new ArrayList<Integer>();
-		primes.add(2);
+		List<Integer> primes = new ArrayList<Integer>();	// create a list
+		primes.add(2);										//added first prime
 		boolean isPrime = true;
-		for (int j = 3; j < 1000000; j++) {
-			for (int k = 0; k < primes.size(); k++) {
-				if (j % primes.get(k) == 0) {
-					isPrime = false;
+		for (int j = 3; j < 1000000; j++) {					//starting at 3 checks every number 
+			for (int k = 0; k < primes.size(); k++) {		//checks every number in the list to 
+				if (j % primes.get(k) == 0) {				//see if it divides cleanly
+					isPrime = false;						//if it does, it's not prime
 					break;
 				}
 			}
-			if (isPrime) {
+			if (isPrime) {									//adds it to primes if it is prime
 				primes.add(j);
 			}
-			isPrime = true;
-			if (primes.size() >= i) {
+			isPrime = true;									//reset primes
+			if (primes.size() >= i) {						//ends the loop when we are when we have enough primes
 				break;
 			}
 		}
@@ -623,15 +623,15 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			String lower = string.toLowerCase();
-			String words = lower.replaceAll("[^a-zA-Z0-9]", "");
+			String lower = string.toLowerCase();					
+			String words = lower.replaceAll("[^a-zA-Z0-9]", "");	//sets everything to lowercase and removes special characters
 			StringBuilder str = new StringBuilder();
-			for (int i = 0; i < words.length(); i++) {
-				char letter = words.charAt(i);
-				if (i % 5 == 0) {
+			for (int i = 0; i < words.length(); i++) {				//for loop to iterate through all the words
+				char letter = words.charAt(i);						//for loop to get each letter
+				if (i % 5 == 0) {									//appends a space every 5th letter
 					str.append(' ');
 				}
-				switch (letter) {
+				switch (letter) {									//switch case to change the letter
 				case 'a':
 					str.append("z");
 					break;
@@ -726,11 +726,11 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			String sentence = string.replaceAll("[^a-zA-Z0-9]", "");
+			String sentence = string.replaceAll("[^a-zA-Z0-9]", "");			//strips string of special characters
 			StringBuilder str = new StringBuilder();
-			for (int i = 0; i < sentence.length(); i++) {
+			for (int i = 0; i < sentence.length(); i++) {						//for loop to get each letter
 				char letter = sentence.charAt(i);
-				switch (letter) {
+				switch (letter) {												//switch case to change letters
 				case 'a':
 					str.append("z");
 					break;
@@ -842,24 +842,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		String iSBN = string.replaceAll("[-]", "");
+		String iSBN = string.replaceAll("[-]", "");											//strips hyphens
 		boolean isValid = true;
 		int total = 0;
-		for (int i = 0; i < iSBN.length(); i++) {
-			if (Character.isDigit(iSBN.charAt(i)) || iSBN.charAt(i) == 'X') {
-				if (Character.isDigit(iSBN.charAt(i))) {
-					int addition = Character.getNumericValue(iSBN.charAt(i)) * (10 - i);
-					total += addition;
-				} else {
-					int addition = 10 * (10 - i);
+		for (int i = 0; i < iSBN.length(); i++) {											//for loop to get each single character
+			if (Character.isDigit(iSBN.charAt(i)) || iSBN.charAt(i) == 'X') {				//checks that the character is an 'X' or a digit
+				if (Character.isDigit(iSBN.charAt(i))) {									//if it is a digit
+					int addition = Character.getNumericValue(iSBN.charAt(i)) * (10 - i);	//parses the digit into a number and multiplies it by the length from the end of the word 
+					total += addition;														//adds the number to the total
+				} else {																	//it it is an 'X'
+					int addition = 10 * (10 - i);											//does what the digit would do if the digit was 10
 					total += addition;
 				}
 
-			} else {
-				isValid = false;
+			} else {																		//if it has any non-X, non-digits
+				isValid = false;															//invalidates the number
 			}
 		}
-		if (total % 11 != 0) {
+		if (total % 11 != 0) {																//invalidates the number if the total is not divisible by 11 
 			isValid = false;
 		}
 		return isValid;
@@ -878,8 +878,8 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public boolean isPangram(String string) {
-		boolean foundA = false;
+	public boolean isPangram(String string) {			
+		boolean foundA = false;							//create 26 different booleans, 1 for each letter
 		boolean foundB = false;
 		boolean foundC = false;
 		boolean foundD = false;
@@ -905,10 +905,10 @@ public class EvaluationService {
 		boolean foundX = false;
 		boolean foundY = false;
 		boolean foundZ = false;
-		String upper = string.toUpperCase();
-		for (int i = 0; i < upper.length(); i++) {
+		String upper = string.toUpperCase();			//converts to uppercase
+		for (int i = 0; i < upper.length(); i++) {		//for loop to get each letter
 			char letter = upper.charAt(i);
-			switch (letter) {
+			switch (letter) {							//switch case for setting the boolean true for each letter
 			case 'A':
 				foundA = true;
 				break;
@@ -991,7 +991,7 @@ public class EvaluationService {
 				break;
 			}
 
-		}
+		}													// returns the "anding" of every boolean
 		return (foundA && foundB && foundC && foundD && foundE && foundF && foundG && foundH && foundI && foundJ
 				&& foundK && foundL && foundM && foundN && foundO && foundP && foundQ && foundR && foundS && foundT
 				&& foundU && foundV && foundW && foundX && foundY && foundZ);
@@ -1006,13 +1006,13 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		LocalDateTime result = LocalDateTime.now();
-		if (given instanceof LocalDate) {
-			LocalDateTime dateTime = ((LocalDate) given).atTime(0, 0, 0);
-			result = dateTime.plusSeconds(1000000000);
-		} else {
-			LocalDateTime dateTime = (LocalDateTime) given;
-			result = dateTime.plusSeconds(1000000000);
+		LocalDateTime result = LocalDateTime.now();							//instantiate a LocalDateTime
+		if (given instanceof LocalDate) {									//if it's a LocalDate 
+			LocalDateTime dateTime = ((LocalDate) given).atTime(0, 0, 0);	//create a LocalDateTime at the start of day
+			result = dateTime.plusSeconds(1000000000);						//adding 1 gigasecond
+		} else {															//else
+			LocalDateTime dateTime = (LocalDateTime) given;					//collect the given
+			result = dateTime.plusSeconds(1000000000);						//adding 1 gigasecond
 		}
 		return result;
 	}
@@ -1031,15 +1031,15 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		int result = 0;
-		HashSet<Integer> numSet = new HashSet<Integer>();
-		for (int j = 0; j < set.length; j++) {
-			int upperLimit = i / (set[j]);
-			for (int k = 0; k <= upperLimit; k++)
+		int result = 0;														//initialize result
+		HashSet<Integer> numSet = new HashSet<Integer>();					//create hashset to hold all multiples of numbers
+		for (int j = 0; j < set.length; j++) {								//for loop to get the numbers in the input set
+			int upperLimit = i / (set[j]);									//create an int to find the upper multiple for each int in the input set
+			for (int k = 0; k <= upperLimit; k++)							//for loop to get the multiples and add them to numSet
 				numSet.add(k * set[j]);
 		}
-		for (int l : numSet) {
-			if (l < i) {
+		for (int l : numSet) {												//for loop to iterate through numSet
+			if (l < i) {													//if the numSet element is less than the int i it added l to the result
 				result += l;
 			}
 		}
@@ -1083,43 +1083,43 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		boolean isValid = true;
-		for (Character digit : string.toCharArray()) {
+		boolean isValid = true;															//initialize boolean for validity of the string
+		for (Character digit : string.toCharArray()) {									//for loop iterates through string and checks that it is all digits or whitespace
 			if (digit != ' ' && !Character.isDigit(digit)) {
 				isValid = false;
 			}
 		}
-		if (isValid) {
-			int total = 0;
-			String number = string.replaceAll("[^0-9]", "");
-			for (int i = 0; i < number.length(); i++) {
-				if (number.length() % 2 == 0) {
-					if (i % 2 == 0) {
-						int twoTimes = Integer.parseInt(number.substring(i, i + 1));
+		if (isValid) {																	//if the string is still valid
+			int total = 0;																//initialize a total int
+			String number = string.replaceAll("[^0-9]", "");							//strips out the whitespace
+			for (int i = 0; i < number.length(); i++) {									//for loop to iterate through the number
+				if (number.length() % 2 == 0) {											//checks if the number has an even number of digits
+					if (i % 2 == 0) {													//checks if if the digit number is even
+						int twoTimes = Integer.parseInt(number.substring(i, i + 1));	//parses the character as an int and multiplies it by 2
 						twoTimes = 2 * twoTimes;
-						if (twoTimes > 9) {
+						if (twoTimes > 9) {												//checks if the resulting number is greater than 9 and subtracts 9 from it if it does
 							twoTimes = twoTimes - 9;
 						}
-						total += twoTimes;
+						total += twoTimes;												//adds the int to the total
 					} else {
-						total += Integer.parseInt(number.substring(i, i + 1));
+						total += Integer.parseInt(number.substring(i, i + 1));			//else adds the int to the total
 					}
 				} else {
-					if (i % 2 != 0) {
-						int twoTimes = Integer.parseInt(number.substring(i, i + 1));
-						twoTimes = 2 * twoTimes;
-						if (twoTimes > 9) {
+					if (i % 2 != 0) {													//checks if if the digit number is odd
+						int twoTimes = Integer.parseInt(number.substring(i, i + 1));	//parses the character as an int and multiplies it by 2
+						twoTimes = 2 * twoTimes;										
+						if (twoTimes > 9) {												//checks if the resulting number is greater than 9 and subtracts 9 from it if it does
 							twoTimes = twoTimes - 9;
 						}
-						total += twoTimes;
+						total += twoTimes;												//adds the int to the total
 					} else {
-						total += Integer.parseInt(number.substring(i, i + 1));
+						total += Integer.parseInt(number.substring(i, i + 1));			//else adds the int to the total
 					}
 
 				}
 			}
 
-			if (total % 10 != 0) {
+			if (total % 10 != 0) {														//if the total is not divisible by 10, invalidates the number
 				isValid = false;
 			}
 		}
@@ -1155,12 +1155,12 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 
-		String[] words = string.replaceAll("[^a-zA-Z0-9 -]", "").split(" ");
-		int lastObject = words.length - 1;
-		int first = Integer.parseInt(words[2]);
-		int second = Integer.parseInt(words[lastObject]);
-		int result = 0;
-		switch (words[3]) {
+		String[] words = string.replaceAll("[^a-zA-Z0-9 -]", "").split(" ");		//strips all special characters except hyphens and then splits on spaces
+		int lastObject = words.length - 1;											// get the last "word"
+		int first = Integer.parseInt(words[2]);										// parse the third word as an int
+		int second = Integer.parseInt(words[lastObject]);							// parse the last word as an int
+		int result = 0;																// initialize a result int
+		switch (words[3]) {															// switch case on the fourth word to find what operation to do
 		case "plus":
 			result = first + second;
 			break;
